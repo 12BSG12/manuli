@@ -1,0 +1,159 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:focus,
+:active {
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.root{
+    min-height: 100vh;
+    margin:  0 auto;
+    max-width: 1536px;
+    padding: 0 20px;
+}
+
+.title {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.input {
+    padding: 10px 20px;
+
+    background-color: #ebebeb;
+    border-radius:  30px;
+    margin: 10px 0;
+}
+
+.card{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, auto));
+    gap: 10px;
+}
+
+.cardItem{
+    position: relative;
+    padding: 50px 50px;
+    background-color: #87cefa;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.cardItem a:hover{
+    background-color: #0072ba;
+    color: white;
+}
+
+.cardItem a{
+    border-radius: 0.5rem;
+    transition: all .2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.cardItem a span {
+    width: 100px;
+    margin: 0 auto;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+@media (min-width: 640px)  {
+    .card{
+        grid-template-columns: repeat(4, minmax(0, auto));
+    }
+}
+
+@media (min-width: 1024px)  {
+    .card{
+        grid-template-columns: repeat(8, minmax(0, auto));
+    }
+
+}
