@@ -34,7 +34,7 @@ const readDirectory = async (directoryPath) => {
 
         pageList.innerHTML += `
           <li class="cardItem">
-            <a href="${entry}" target="_blanck"><span>${fileName}</span></a>
+            <a href="${entry}" target="_blank"><span>${fileName}</span></a>
           </li>
         `;
       } else {
