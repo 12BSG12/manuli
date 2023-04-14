@@ -1,4 +1,4 @@
-const directoryPath = "/test";
+const directoryPath = "/src/test";
 const pageList = document.getElementById("page-list");
 const input = document.querySelector(".input");
 
