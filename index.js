@@ -1,4 +1,4 @@
-const directoryPath = "/manuals";
+const directoryPath = "/manuli/manuals";
 const pageList = document.getElementById("page-list");
 const input = document.querySelector(".input");
 
