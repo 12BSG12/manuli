@@ -1,4 +1,4 @@
-const directoryPath = "/manuli/manuals";
+const directoryPath = "https://12bsg12.github.io/manuli/manuals";
 const pageList = document.getElementById("page-list");
 const input = document.querySelector(".input");
 
