@@ -3,19 +3,15 @@ const pageList = document.getElementById("page-list");
 const input = document.querySelector(".input");
 
 input.addEventListener("input", (e) => {
-  if (!e.target.value) {
-    pageList.innerHTML = "";
-    readDirectory(directoryPath);
-  }
+  const filterValue = e.target.value.toLowerCase();
 
-  const listItems = pageList.querySelectorAll("li");
-  const filteredItems = [...listItems].filter((item) =>
-    item.textContent.includes(e.target.value)
-  );
-
-  const html = filteredItems.map((item) => item.outerHTML).join("");
-
-  pageList.innerHTML = html;
+  [...pageList.children].forEach(item => {
+    if (item.textContent.toLowerCase().includes(filterValue)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
 });
 
 const readDirectory = async (directoryPath) => {
@@ -33,9 +29,14 @@ const readDirectory = async (directoryPath) => {
         const fileName = entry.split("/").pop().replace(".html", "");
 
         pageList.innerHTML += `
-          <li class="cardItem">
-            <a href="${entry}" target="_blank"><span>${fileName}</span></a>
-          </li>
+          <div class="cartItem">
+            <a href="${entry}" target="_blank">
+              <img src="https://via.placeholder.com/500x120" />
+              <p class="subTitle">
+                ${fileName}
+              </p>
+            </a>
+          </div>
         `;
       } else {
         readDirectory(entry);
