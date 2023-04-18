@@ -1,25 +1,47 @@
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
     <link rel="icon" href="/assets/eris_Logo.png" />
     <link rel="stylesheet" href="styles.css" />
     <title>Мануалы</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="root">
-        <div class="header">
-          <a href="http://10.59.4.33/">
-            <img class="logo" src="/assets/eris_main.png"/>
-          </a>
-          <h1 class="title">Мануалы</h1>
-        </div>
-        <div class="wrapper">
-            <input class="input" placeholder="Введите название..."/>
-            <div class="cart" id="page-list"></div>
-        </div>
+      <div class="form">
+        <form>
+          <input class="formInputText" type="text" placeholder="Введите название папки..." />
+          <input class="formInputFile" type="file" multiple="multiple" />
+          <button type="submit" class="formBtn">go</button>
+        </form>
+      </div>
+      <button class="toggleBtn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          shape-rendering="geometricPrecision"
+          text-rendering="geometricPrecision"
+          image-rendering="optimizeQuality"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          viewBox="0 0 512.02 319.26"
+        >
+          <path
+            d="M5.9 48.96 48.97 5.89c7.86-7.86 20.73-7.84 28.56 0l178.48 178.48L434.5 5.89c7.86-7.86 20.74-7.82 28.56 0l43.07 43.07c7.83 7.84 7.83 20.72 0 28.56l-192.41 192.4-.36.37-43.07 43.07c-7.83 7.82-20.7 7.86-28.56 0l-43.07-43.07-.36-.37L5.9 77.52c-7.87-7.86-7.87-20.7 0-28.56z"
+          ></path>
+        </svg>
+      </button>
+      <div class="header">
+        <a href="http://10.59.4.33/">
+          <img class="logo" src="/assets/eris_main.png" />
+        </a>
+        <h1 class="title">Мануалы</h1>
+      </div>
+      <div class="wrapper">
+        <input class="input" placeholder="Введите название..." />
+        <div class="cart" id="page-list"></div>
+      </div>
     </div>
     <script src="index.js"></script>
-</body>
+  </body>
 </html>
