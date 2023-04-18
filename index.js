@@ -1,4 +1,3 @@
-const directoryPath = '/manuals';
 const pageList = document.getElementById('page-list');
 const input = document.querySelector('.input');
 
@@ -14,39 +13,7 @@ input.addEventListener('input', (e) => {
   });
 });
 
-// const readDirectory = async (directoryPath) => {
-//   const response = await fetch(directoryPath);
-//   const html = await response.text();
-//   const parser = new DOMParser();
-//   const doc = parser.parseFromString(html, "text/html");
-
-//   const entries = [...doc.querySelectorAll("a")].map((a) => a.href);
-
-//   entries
-//     .filter((item) => item.includes(`${directoryPath}/`))
-//     .map((entry) => {
-//       if (entry.endsWith(".html")) {
-//         const fileName = entry.split("/").pop().replace(".html", "");
-
-//         pageList.innerHTML += `
-//           <div class="cartItem">
-//             <a href="${entry}" target="_blank">
-//               <img src="https://via.placeholder.com/500x120" />
-//               <p class="subTitle">
-//                 ${fileName}
-//               </p>
-//             </a>
-//           </div>
-//         `;
-//       } else {
-//         readDirectory(entry);
-//       }
-//     });
-// };
-
-// readDirectory(directoryPath);
-
-const fetching = async () => {
+const fetching = async (path = 'manual') => {
   var options = {
     headers: {
       'Content-Type': 'application/json',
@@ -55,19 +22,41 @@ const fetching = async () => {
     },
   };
   const response = await fetch(
-    'https://cloud-api.yandex.net/v1/disk/resources?path=manual',
+    `https://cloud-api.yandex.net/v1/disk/resources?path=${path}`,
     options,
   );
   const json = await response.json();
-  console.log(json._embedded);
-  json._embedded.items.forEach((item) => {
-    console.log(item.preview);
+
+  return json;
+};
+
+const loadCard = async () => {
+  const json = await fetching();
+
+  json._embedded.items.forEach(async (item) => {
+    const path = item.path.replace('disk:/', '');
+    const cardJson = await fetching(path);
+    console.log(cardJson);
+    const obj = {};
+
+    cardJson._embedded.items.forEach((el) => {
+      if (el.media_type === 'image') {
+        obj.src = el.preview;
+      }
+
+      if (el.media_type === 'document') {
+        const fileName = el.name.replace(/\..*/, '');
+        obj.href = el.public_url;
+        obj.fileName = fileName;
+      }
+    });
+
     pageList.innerHTML += `
       <div class="cartItem">
-        <a href="${item.preview}" target="_blank">
-          <img src="${item.preview}" />
+        <a href="${obj.href}" target="_blank">
+          <img src="${obj.src}" />
           <p class="subTitle">
-            ${item.name}
+            ${obj.fileName}
           </p>
         </a>
       </div>
@@ -75,4 +64,4 @@ const fetching = async () => {
   });
 };
 
-fetching();
+loadCard();
