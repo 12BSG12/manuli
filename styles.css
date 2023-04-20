@@ -105,11 +105,13 @@ body{
 
 .form {
   height: 0;
-  position: relative;
-  top: -1000px;
+  position: absolute;
+  top: -160px;
   visibility: none;
   width: 320px;
-  margin: 0 auto;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
   background-color: #0b82cc;
   border-bottom-right-radius: 2rem;
   border-bottom-left-radius: 2rem;
@@ -129,7 +131,7 @@ body{
 
 
 .formActive {
-  top: -10px;
+  top: 0px;
   height: 160px;
   visibility: visible;
 }
@@ -247,6 +249,7 @@ body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .formInputText{
