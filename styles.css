@@ -107,9 +107,9 @@ body{
   position: relative;
   top: -1000px;
   visibility: none;
-  left: 0;
-  right: 0;
-  background-color: #0072ba;
+  width: 320px;
+  margin: 0 auto;
+  background-color: #0b82cc;
   border-bottom-right-radius: 2rem;
   border-bottom-left-radius: 2rem;
   z-index: 100;
@@ -129,7 +129,7 @@ body{
 
 .formActive {
   top: -10px;
-  height: 600px;
+  height: 160px;
   visibility: visible;
 }
 
@@ -163,6 +163,7 @@ body{
 
 .title {
   font-size: 30px;
+  margin: 10px 0;
 }
 
 .input {
@@ -170,6 +171,7 @@ body{
   background-color: #ebebeb;
   border-radius: 30px;
   margin-left: auto;
+  margin-bottom: 10px;
 }
 
 .cart {
@@ -189,6 +191,9 @@ body{
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+  }
+  .title{
+    margin: 0;
   }
 }
 
@@ -235,4 +240,53 @@ body{
   padding: 0.5rem 0.75rem;
 
   transition: all .2s ease-in-out;
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.formInputText{
+  width: 280px;
+  padding: 10px 20px;
+  background-color: #ebebeb;
+  border-radius: 30px;
+  margin: 10px 0;
+}
+
+.formInputFile{
+  width: 280px;
+  max-width: 100%;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #555;
+  margin-bottom: 10px;
+}
+
+.formInputFile::file-selector-button {
+  margin-right: 10px;
+  border: none;
+  background: #084cdf;
+  padding: 10px 20px;
+  border-radius: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.formInputFile::file-selector-button:hover {
+  background: #0d45a5;
+}
+
+.formBtn{
+  padding: 10px;
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  background-color: #084cdf;
+  color: #fff;
 }

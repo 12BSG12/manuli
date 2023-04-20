@@ -79,7 +79,6 @@ const formBtn = document.querySelector('.formBtn');
 formBtn.addEventListener('click', (e) => {
   e.preventDefault();
   createFolderInYandexDisk();
-  //setManualInYandexDisk();
 });
 
 const createFolderInYandexDisk = async () => {
@@ -100,7 +99,6 @@ const createFolderInYandexDisk = async () => {
 
 const setManualInYandexDisk = (folderName) => {
   const formInputFile = document.querySelector('.formInputFile');
-  const file = formInputFile.files[0];
 
   [...formInputFile.files].forEach(async (item) => {
     const responseUploadUrl = await fetch(
@@ -116,7 +114,7 @@ const setManualInYandexDisk = (folderName) => {
       const fileContent = e.target.result;
 
       const newOptions = {
-        method: 'PUT',
+        method: uploadUrl.method,
         headers: {
           'Content-Type': item.type,
         },
@@ -127,9 +125,24 @@ const setManualInYandexDisk = (folderName) => {
 
       if (res.ok) {
         console.log(`File ${item.name} was uploaded successfully`);
+        publishFileInYandexDisk(`manual/${folderName}/${item.name}`);
       } else {
         console.log(`Failed to upload file ${item.name}: ${res.statusText}`);
       }
     });
   });
+};
+
+const publishFileInYandexDisk = async (path) => {
+  const responsePublicUrl = await fetch(
+    `https://cloud-api.yandex.net/v1/disk/resources/publish?path=${path}`,
+    { method: 'PUT', ...options },
+  );
+
+  const publicUrl = await responsePublicUrl.json();
+
+  const res = await fetch(publicUrl.href, options);
+
+  const json = await res.json();
+  console.log(json);
 };
