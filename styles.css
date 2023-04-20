@@ -92,6 +92,7 @@ body{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  overflow-x: hidden;
 }
 
 .root {
@@ -222,7 +223,6 @@ body{
   object-fit: cover;
 }
 
-
 .cartItem .subTitle {
   position: absolute;
   bottom: 0;
@@ -289,4 +289,31 @@ body{
   border-radius: 0.5rem;
   background-color: #084cdf;
   color: #fff;
+}
+.formBtn:disabled{
+  opacity: .6;
+}
+
+.alert{
+  position: absolute;
+  bottom: 10px;
+  right: -100%;
+  width: 300px;
+  border-radius: 1.5rem;
+  background-color: rgb(248, 74, 74);
+  padding: 10px 20px;
+  overflow-wrap: break-word;
+  transition: all .2s ease-in-out;
+}
+
+.alertTitle{
+  margin-bottom: 10px;
+}
+
+.closeAlert{
+  position: absolute;
+  top: 1px;
+  right: 10px;
+  background-color: transparent;
+  font-size: 25px;
 }

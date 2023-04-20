@@ -1,5 +1,11 @@
 const pageList = document.getElementById('page-list');
 const input = document.querySelector('.input');
+const formInputText = document.querySelector('.formInputText');
+const formInputFile = document.querySelector('.formInputFile');
+const alertMessage = document.querySelector('.alertMessage');
+const closeAlert = document.querySelector('.closeAlert');
+const customAlert = document.querySelector('.alert');
+const alertTitle = document.querySelector('.alertTitle');
 
 const options = {
   headers: {
@@ -75,15 +81,34 @@ toggleBtn.addEventListener('click', () => {
 });
 
 const formBtn = document.querySelector('.formBtn');
+formBtn.disabled = true;
 
 formBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  createFolderInYandexDisk();
+
+  if (formInputText.value && [...formInputFile.files].length > 0) {
+    createFolderInYandexDisk();
+  } else {
+    alertTitle.innerHTML = 'Ошибка!';
+    alertMessage.innerHTML = 'Выберите файлы для загрузки!';
+    customAlert.style.right = '10px';
+  }
+});
+
+closeAlert.addEventListener('click', (e) => {
+  e.preventDefault();
+  customAlert.style.right = '-100%';
+});
+
+formInputText.addEventListener('input', (e) => {
+  if (e.target.value) {
+    formBtn.disabled = false;
+  } else {
+    formBtn.disabled = true;
+  }
 });
 
 const createFolderInYandexDisk = async () => {
-  const formInputText = document.querySelector('.formInputText');
-
   const responseCreateUrl = await fetch(
     `https://cloud-api.yandex.net/v1/disk/resources?path=manual/${formInputText.value}`,
     { method: 'PUT', ...options },
@@ -98,8 +123,6 @@ const createFolderInYandexDisk = async () => {
 };
 
 const setManualInYandexDisk = (folderName) => {
-  const formInputFile = document.querySelector('.formInputFile');
-
   [...formInputFile.files].forEach(async (item) => {
     const responseUploadUrl = await fetch(
       `https://cloud-api.yandex.net/v1/disk/resources/upload?path=manual/${folderName}/${item.name}&overwrite=true`,
