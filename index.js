@@ -6,7 +6,8 @@ const alertMessage = document.querySelector('.alertMessage');
 const closeAlert = document.querySelector('.closeAlert');
 const customAlert = document.querySelector('.alert');
 const alertTitle = document.querySelector('.alertTitle');
-const spinner = document.querySelector('.spinner');
+const spinnerForm = document.getElementById('spinnerForm');
+const spinnerBody = document.getElementById('spinnerBody');
 
 const options = {
   headers: {
@@ -39,36 +40,44 @@ const fetching = async (path = 'manual') => {
 };
 
 const loadCards = async () => {
-  const json = await fetching();
+  try {
+    spinnerBody.style.display = 'block';
 
-  json._embedded.items.forEach(async (item) => {
-    const path = item.path.replace('disk:/', '');
-    const cardJson = await fetching(path);
-    const obj = {};
+    const json = await fetching();
 
-    cardJson._embedded.items.forEach((el) => {
-      if (el.media_type === 'image') {
-        obj.src = el.preview;
-      }
+    json._embedded.items.forEach(async (item) => {
+      const path = item.path.replace('disk:/', '');
+      const cardJson = await fetching(path);
+      const obj = {};
 
-      if (el.media_type === 'document') {
-        const fileName = el.name.replace(/\..*/, '');
-        obj.href = el.public_url;
-        obj.fileName = fileName;
-      }
+      cardJson._embedded.items.forEach((el) => {
+        if (el.media_type === 'image') {
+          obj.src = el.preview;
+        }
+
+        if (el.media_type === 'document') {
+          const fileName = el.name.replace(/\..*/, '');
+          obj.href = el.public_url;
+          obj.fileName = fileName;
+        }
+      });
+
+      pageList.innerHTML += `
+        <div class="cartItem">
+          <a href="${obj.href}" target="_blank">
+            <img src="${obj.src}" />
+            <p class="subTitle">
+              ${obj.fileName}
+            </p>
+          </a>
+        </div>
+      `;
     });
-
-    pageList.innerHTML += `
-      <div class="cartItem">
-        <a href="${obj.href}" target="_blank">
-          <img src="${obj.src}" />
-          <p class="subTitle">
-            ${obj.fileName}
-          </p>
-        </a>
-      </div>
-    `;
-  });
+  } catch (error) {
+    console.log(error);
+  } finally {
+    spinnerBody.style.display = 'none';
+  }
 };
 
 loadCards();
@@ -88,7 +97,7 @@ formBtn.addEventListener('click', (e) => {
 
   if (formInputText.value && [...formInputFile.files].length > 0) {
     formBtn.disabled = true;
-    spinner.style.display = 'block';
+    spinnerForm.style.display = 'block';
     createFolderInYandexDisk();
   } else {
     alertTitle.innerHTML = 'Ошибка!';
@@ -169,10 +178,8 @@ const publishFileInYandexDisk = async (path) => {
   const res = await fetch(publicUrl.href, options);
 
   if (res.ok) {
-    spinner.style.display = 'none';
+    spinnerForm.style.display = 'none';
     location.reload();
-    // pageList.innerHTML = '';
-    // loadCards();
     const json = await res.json();
     console.log(json);
   }
