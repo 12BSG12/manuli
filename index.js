@@ -6,6 +6,7 @@ const alertMessage = document.querySelector('.alertMessage');
 const closeAlert = document.querySelector('.closeAlert');
 const customAlert = document.querySelector('.alert');
 const alertTitle = document.querySelector('.alertTitle');
+const spinner = document.querySelector('.spinner');
 
 const options = {
   headers: {
@@ -81,12 +82,13 @@ toggleBtn.addEventListener('click', () => {
 });
 
 const formBtn = document.querySelector('.formBtn');
-formBtn.disabled = true;
 
 formBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
   if (formInputText.value && [...formInputFile.files].length > 0) {
+    formBtn.disabled = true;
+    spinner.style.display = 'block';
     createFolderInYandexDisk();
   } else {
     alertTitle.innerHTML = 'Ошибка!';
@@ -166,6 +168,12 @@ const publishFileInYandexDisk = async (path) => {
 
   const res = await fetch(publicUrl.href, options);
 
-  const json = await res.json();
-  console.log(json);
+  if (res.ok) {
+    spinner.style.display = 'none';
+    location.reload();
+    // pageList.innerHTML = '';
+    // loadCards();
+    const json = await res.json();
+    console.log(json);
+  }
 };

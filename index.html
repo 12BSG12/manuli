@@ -13,6 +13,10 @@
   <body>
     <div class="root">
       <div class="form">
+        <div class="spinner">
+          <span class="spinnerIcon"></span>
+          <div class="spinnerOverlay"></div>
+        </div>
         <form>
           <input
             class="formInputText"
@@ -20,7 +24,7 @@
             placeholder="Введите название папки c мануалом..."
           />
           <input class="formInputFile" type="file" multiple="multiple" />
-          <button type="submit" class="formBtn">Загрузить</button>
+          <button type="submit" class="formBtn" disabled>Загрузить</button>
         </form>
       </div>
       <button class="toggleBtn">
