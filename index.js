@@ -1,6 +1,5 @@
 const pageList = document.getElementById('page-list');
 const input = document.querySelector('.input');
-const formInputText = document.querySelector('.formInputText');
 const formInputFile = document.querySelector('.formInputFile');
 const alertMessage = document.querySelector('.alertMessage');
 const closeAlert = document.querySelector('.closeAlert');
@@ -8,6 +7,10 @@ const customAlert = document.querySelector('.alert');
 const alertTitle = document.querySelector('.alertTitle');
 const spinnerForm = document.getElementById('spinnerForm');
 const spinnerBody = document.getElementById('spinnerBody');
+const authFormInputText = document.getElementById('authFormInputText');
+const addFormInputText = document.getElementById('addFormInputText');
+
+let isAuth = false;
 
 const options = {
   headers: {
@@ -86,16 +89,20 @@ const toggleBtn = document.querySelector('.toggleBtn');
 const form = document.querySelector('.form');
 
 toggleBtn.addEventListener('click', () => {
-  form.classList.toggle('formActive');
+  if (!isAuth) {
+    form.classList.toggle('formActive');
+  } else {
+    form.classList.toggle('formAddActive');
+  }
   toggleBtn.classList.toggle('toggleBtnActive');
 });
 
-const formBtn = document.querySelector('.formBtn');
+const formBtn = document.getElementById('addFormBtn');
 
 formBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
-  if (formInputText.value && [...formInputFile.files].length > 0) {
+  if (addFormInputText.value && [...formInputFile.files].length > 0) {
     formBtn.disabled = true;
     spinnerForm.style.display = 'block';
     createFolderInYandexDisk();
@@ -111,7 +118,7 @@ closeAlert.addEventListener('click', (e) => {
   customAlert.style.right = '-100%';
 });
 
-formInputText.addEventListener('input', (e) => {
+addFormInputText.addEventListener('input', (e) => {
   if (e.target.value) {
     formBtn.disabled = false;
   } else {
@@ -121,7 +128,7 @@ formInputText.addEventListener('input', (e) => {
 
 const createFolderInYandexDisk = async () => {
   const responseCreateUrl = await fetch(
-    `https://cloud-api.yandex.net/v1/disk/resources?path=manual/${formInputText.value}`,
+    `https://cloud-api.yandex.net/v1/disk/resources?path=manual/${addFormInputText.value}`,
     { method: 'PUT', ...options },
   );
 
@@ -184,3 +191,33 @@ const publishFileInYandexDisk = async (path) => {
     console.log(json);
   }
 };
+
+let userEmail = '';
+
+const getDiskInfo = async () => {
+  const response = await fetch(`https://cloud-api.yandex.net/v1/disk/`, options);
+
+  const data = await response.json();
+
+  userEmail = data.user.login;
+};
+
+getDiskInfo();
+
+const authFormBtn = document.getElementById('authFormBtn');
+const addForm = document.getElementById('addForm');
+const authForm = document.getElementById('authForm');
+
+authFormBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  if (authFormInputText.value.toLowerCase() === userEmail.toLowerCase()) {
+    isAuth = true;
+    authForm.style.display = 'none';
+    addForm.style.display = 'flex';
+    form.classList.add('top-160');
+    form.classList.add('h160');
+    form.classList.remove('formActive');
+    form.classList.add('formAddActive');
+  }
+});

@@ -106,7 +106,7 @@ body{
 .form {
   height: 0;
   position: absolute;
-  top: -160px;
+  top: -100px;
   visibility: none;
   width: 320px;
   left: 50%;
@@ -129,13 +129,23 @@ body{
   transition: all .2s ease-in-out;
 }
 
-
 .formActive {
-  top: 0px;
+  top: 0px !important;
+  height: 100px;
+  visibility: visible;
+}
+.formAddActive {
+  top: 0px !important;
   height: 160px;
   visibility: visible;
 }
 
+.top-160 {
+  top: -160px;
+}
+.h160 {
+  height: 160px;
+}
 .toggleBtnActive {
   transform: rotate(180deg);
 }
@@ -361,4 +371,8 @@ body{
 	100% {
 	  transform: rotate(360deg);
 	}
+}
+
+#addForm{
+  display: none;
 }

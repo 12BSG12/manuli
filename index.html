@@ -21,14 +21,24 @@
           <div class="spinnerIcon"></div>
           <div class="spinnerOverlay rounded"></div>
         </div>
-        <form>
+        <form id="authForm">
           <input
+            id="authFormInputText"
+            class="formInputText"
+            type="text"
+            placeholder="Введите почту..."
+          />
+          <button id="authFormBtn" type="submit" class="formBtn">Получить доступ</button>
+        </form>
+        <form id="addForm">
+          <input
+            id="addFormInputText"
             class="formInputText"
             type="text"
             placeholder="Введите название папки c мануалом..."
           />
           <input class="formInputFile" type="file" multiple="multiple" />
-          <button type="submit" class="formBtn" disabled>Загрузить</button>
+          <button id="addFormBtn" type="submit" class="formBtn" disabled>Загрузить</button>
         </form>
         <button class="toggleBtn">
           <svg
