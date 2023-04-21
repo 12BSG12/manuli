@@ -60,11 +60,16 @@ const loadCards = async () => {
 
         if (el.media_type === 'document') {
           const fileName = el.name.replace(/\..*/, '');
-          obj.href = el.public_url;
+          const path = 'https://docs.yandex.ru/docs/view?url=ya-disk-public://';
+          const file = el.path.split('/').pop();
+          const href = `${path}${encodeURIComponent(el.public_key)}&name=${encodeURIComponent(
+            file,
+          )}`;
+
+          obj.href = href;
           obj.fileName = fileName;
         }
       });
-
       pageList.innerHTML += `
         <div class="cartItem">
           <a href="${obj.href}" target="_blank">
