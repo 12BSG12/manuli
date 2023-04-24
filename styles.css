@@ -375,3 +375,15 @@ body {
 #addForm {
   display: none;
 }
+
+.pdfView {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.pdfView iframe {
+  width: 600px;
+  height: 800px;
+}

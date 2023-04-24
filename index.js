@@ -9,6 +9,7 @@ const spinnerForm = document.getElementById('spinnerForm');
 const spinnerBody = document.getElementById('spinnerBody');
 const authFormInputText = document.getElementById('authFormInputText');
 const addFormInputText = document.getElementById('addFormInputText');
+const pdfView = document.querySelector('.pdfView');
 
 let isAuth = false;
 
@@ -55,7 +56,7 @@ const loadCards = async () => {
 
       cardJson._embedded.items.forEach((el) => {
         if (el.media_type === 'image') {
-          obj.src = el.preview;
+          obj.src = el.file;
         }
 
         if (el.media_type === 'document') {
@@ -65,20 +66,27 @@ const loadCards = async () => {
           const href = `${path}${encodeURIComponent(el.public_key)}&name=${encodeURIComponent(
             file,
           )}`;
-
-          obj.href = href;
+          obj.path = href;
+          obj.href = el.public_url;
           obj.fileName = fileName;
         }
       });
+
       pageList.innerHTML += `
         <div class="cartItem">
-          <a href="${obj.href}" target="_blank">
+          <a href="${obj.path}" target="_blank">
             <img src="${obj.src}" />
             <p class="subTitle">
               ${obj.fileName}
             </p>
           </a>
         </div>
+      `;
+
+      pdfView.innerHTML += `
+        <iframe
+          src="https://getfile.dokpub.com/js/pdfjs/web/viewer.php?fl=${obj.href}"
+        ></iframe>
       `;
     });
   } catch (error) {
