@@ -10,8 +10,15 @@ const spinnerBody = document.getElementById('spinnerBody');
 const authFormInputText = document.getElementById('authFormInputText');
 const addFormInputText = document.getElementById('addFormInputText');
 const pdfView = document.querySelector('.pdfView');
+const toggleBtn = document.querySelector('.toggleBtn');
+const form = document.querySelector('.form');
+const formBtn = document.getElementById('addFormBtn');
+const authFormBtn = document.getElementById('authFormBtn');
+const addForm = document.getElementById('addForm');
+const authForm = document.getElementById('authForm');
 
 let isAuth = false;
+let userEmail = '';
 
 const options = {
   headers: {
@@ -31,6 +38,56 @@ input.addEventListener('input', (e) => {
       item.style.display = 'none';
     }
   });
+});
+
+toggleBtn.addEventListener('click', () => {
+  if (!isAuth) {
+    form.classList.toggle('formActive');
+  } else {
+    form.classList.toggle('formAddActive');
+  }
+  toggleBtn.classList.toggle('toggleBtnActive');
+});
+
+formBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  if (addFormInputText.value && [...formInputFile.files].length > 0) {
+    formBtn.disabled = true;
+    spinnerForm.style.display = 'block';
+    createFolderInYandexDisk();
+  } else {
+    alertTitle.innerHTML = 'Ошибка!';
+    alertMessage.innerHTML = 'Выберите файлы для загрузки!';
+    customAlert.style.right = '10px';
+  }
+});
+
+closeAlert.addEventListener('click', (e) => {
+  e.preventDefault();
+  customAlert.style.right = '-100%';
+});
+
+addFormInputText.addEventListener('input', (e) => {
+  if (e.target.value) {
+    formBtn.disabled = false;
+  } else {
+    formBtn.disabled = true;
+  }
+});
+
+authFormBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  if (authFormInputText.value.toLowerCase() === userEmail.toLowerCase()) {
+    isAuth = true;
+    authForm.style.display = 'none';
+    addForm.style.display = 'flex';
+    form.classList.add('top-160');
+    form.classList.add('h160');
+    form.classList.remove('formActive');
+    form.classList.add('formAddActive');
+  }
 });
 
 const fetching = async (path = 'manual') => {
@@ -67,7 +124,7 @@ const loadCards = async () => {
             file,
           )}`;
           obj.path = href;
-          obj.href = el.public_url;
+          obj.href = `https://getfile.dokpub.com/js/pdfjs/web/viewer.php?fl=${el.public_url}`;
           obj.fileName = fileName;
         }
       });
@@ -85,7 +142,7 @@ const loadCards = async () => {
 
       pdfView.innerHTML += `
         <iframe
-          src="https://getfile.dokpub.com/js/pdfjs/web/viewer.php?fl=${obj.href}"
+          src="${obj.href}"
         ></iframe>
       `;
     });
@@ -95,49 +152,6 @@ const loadCards = async () => {
     spinnerBody.style.display = 'none';
   }
 };
-
-loadCards();
-
-const toggleBtn = document.querySelector('.toggleBtn');
-const form = document.querySelector('.form');
-
-toggleBtn.addEventListener('click', () => {
-  if (!isAuth) {
-    form.classList.toggle('formActive');
-  } else {
-    form.classList.toggle('formAddActive');
-  }
-  toggleBtn.classList.toggle('toggleBtnActive');
-});
-
-const formBtn = document.getElementById('addFormBtn');
-
-formBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  if (addFormInputText.value && [...formInputFile.files].length > 0) {
-    formBtn.disabled = true;
-    spinnerForm.style.display = 'block';
-    createFolderInYandexDisk();
-  } else {
-    alertTitle.innerHTML = 'Ошибка!';
-    alertMessage.innerHTML = 'Выберите файлы для загрузки!';
-    customAlert.style.right = '10px';
-  }
-});
-
-closeAlert.addEventListener('click', (e) => {
-  e.preventDefault();
-  customAlert.style.right = '-100%';
-});
-
-addFormInputText.addEventListener('input', (e) => {
-  if (e.target.value) {
-    formBtn.disabled = false;
-  } else {
-    formBtn.disabled = true;
-  }
-});
 
 const createFolderInYandexDisk = async () => {
   const responseCreateUrl = await fetch(
@@ -154,7 +168,7 @@ const createFolderInYandexDisk = async () => {
 };
 
 const setManualInYandexDisk = (folderName) => {
-  [...formInputFile.files].forEach(async (item) => {
+  [...formInputFile.files].forEach(async (item, idx, arr) => {
     const responseUploadUrl = await fetch(
       `https://cloud-api.yandex.net/v1/disk/resources/upload?path=manual/${folderName}/${item.name}&overwrite=true`,
       options,
@@ -179,7 +193,7 @@ const setManualInYandexDisk = (folderName) => {
 
       if (res.ok) {
         console.log(`File ${item.name} was uploaded successfully`);
-        publishFileInYandexDisk(`manual/${folderName}/${item.name}`);
+        publishFileInYandexDisk(`manual/${folderName}/${item.name}`, idx, arr);
       } else {
         console.log(`Failed to upload file ${item.name}: ${res.statusText}`);
       }
@@ -187,25 +201,19 @@ const setManualInYandexDisk = (folderName) => {
   });
 };
 
-const publishFileInYandexDisk = async (path) => {
+const publishFileInYandexDisk = async (path, idx, arr) => {
   const responsePublicUrl = await fetch(
     `https://cloud-api.yandex.net/v1/disk/resources/publish?path=${path}`,
     { method: 'PUT', ...options },
   );
 
-  const publicUrl = await responsePublicUrl.json();
-
-  const res = await fetch(publicUrl.href, options);
-
-  if (res.ok) {
+  if (responsePublicUrl.ok && arr.length - 1 === idx) {
     spinnerForm.style.display = 'none';
-    location.reload();
-    const json = await res.json();
-    console.log(json);
+    pageList.innerHTML = '';
+    pdfView.innerHTML = '';
+    loadCards();
   }
 };
-
-let userEmail = '';
 
 const getDiskInfo = async () => {
   const response = await fetch(`https://cloud-api.yandex.net/v1/disk/`, options);
@@ -215,22 +223,8 @@ const getDiskInfo = async () => {
   userEmail = data.user.login;
 };
 
-getDiskInfo();
+const loadData = async () => {
+  await Promise.all([loadCards(), getDiskInfo()]);
+};
 
-const authFormBtn = document.getElementById('authFormBtn');
-const addForm = document.getElementById('addForm');
-const authForm = document.getElementById('authForm');
-
-authFormBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  if (authFormInputText.value.toLowerCase() === userEmail.toLowerCase()) {
-    isAuth = true;
-    authForm.style.display = 'none';
-    addForm.style.display = 'flex';
-    form.classList.add('top-160');
-    form.classList.add('h160');
-    form.classList.remove('formActive');
-    form.classList.add('formAddActive');
-  }
-});
+loadData();

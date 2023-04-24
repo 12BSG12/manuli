@@ -386,4 +386,5 @@ body {
 .pdfView iframe {
   width: 600px;
   height: 800px;
+  border-radius: 1rem;
 }
